@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-
+import 'package:music_ui/Screeens/nowplay.dart';
 import 'package:music_ui/widgets/drawer.dart';
 
-import 'nowplay.dart';
-
-class ScreenRecents extends StatefulWidget {
-  ScreenRecents({Key? key}) : super(key: key);
+class ScreenMostply extends StatefulWidget {
+  ScreenMostply({Key? key}) : super(key: key);
 
   @override
-  State<ScreenRecents> createState() => _ScreenRecentsState();
+  State<ScreenMostply> createState() => _ScreenMostplyState();
 }
 
-class _ScreenRecentsState extends State<ScreenRecents> {
+class _ScreenMostplyState extends State<ScreenMostply> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xff091127),
       appBar: AppBar(
         backgroundColor: Color(0xff091127),
-        title: Text('Recents'),
+        title: Text('Most Played'),
         centerTitle: true,
       ),
       drawer: ScreenDrawer(),

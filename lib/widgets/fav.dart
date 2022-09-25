@@ -15,13 +15,13 @@ class _FavWidgetState extends State<FavWidget> {
         onPressed: fav,
         icon: (_isfavorite
             ? Icon(
-                Icons.star_border,
+                Icons.favorite_outline,
                 color: Colors.white,
                 size: 30,
               )
             : Icon(
-                Icons.star,
-                color: Colors.orange,
+                Icons.favorite,
+                color: Colors.red,
                 size: 30,
               )));
   }

@@ -1,18 +1,47 @@
-import 'dart:developer';
-
+import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:music_ui/Screeens/home.dart';
 import 'package:music_ui/widgets/fav.dart';
+import 'package:music_ui/widgets/songlist.dart';
 
 class ScreenNowplay extends StatefulWidget {
-  const ScreenNowplay({Key? key}) : super(key: key);
+  final Audio? songs1;
+  final int? index;
+  final AssetsAudioPlayer? assetaudioplayer;
+  const ScreenNowplay(
+      {Key? key,
+      required this.assetaudioplayer,
+      required this.index,
+      required this.songs1})
+      : super(key: key);
 
   @override
   State<ScreenNowplay> createState() => _ScreenNowplayState();
 }
 
 class _ScreenNowplayState extends State<ScreenNowplay> {
-  bool _isplaying = false;
+  bool _isplaying = true;
   double _currentsliderValue = 20;
+  // final AudioPlayer _player = AudioPlayer();
+  // final AudioPlayer _player = AudioPlayer();
+  AssetsAudioPlayer audioPlayer = AssetsAudioPlayer();
+
+  // final AssetsAudioPlayer audioPlayer;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    songplayNow();
+    super.initState();
+  }
+
+  Future<void> songplayNow() async {
+    await widget.assetaudioplayer!.open(
+      songarray[widget.index!],
+    );
+    widget.assetaudioplayer!.play();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +51,8 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
         backgroundColor: Color(0xff091127),
         leading: IconButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (ctx1) => ScreenHome()));
             },
             icon: Icon(Icons.arrow_back)),
         title: Text('Playing Now'),
@@ -43,11 +73,11 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                 ClipRRect(child: Image.asset('asset/images/plyscrnImg.jpeg')),
           ),
           Text(
-            'Song Name',
+            '${songarray[widget.index!].metas.title!}',
             style: TextStyle(color: Colors.white70, fontSize: 24),
           ),
           Text(
-            'Artist Name',
+            '${songarray[widget.index!].metas.artist!}',
             style: TextStyle(color: Colors.white70, fontSize: 15),
           ),
           SizedBox(
@@ -66,29 +96,28 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                   ))
             ],
           ),
-          Slider(
-              inactiveColor: Colors.grey,
-              value: _currentsliderValue,
-              max: 100,
-              activeColor: Colors.white,
-              onChanged: (double value) {
-                setState(() {
-                  _currentsliderValue = value;
-                });
-              }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '   00:00',
-                style: TextStyle(color: Colors.white70),
-              ),
-              Text(
-                '04:00   ',
-                style: TextStyle(color: Colors.white70),
-              )
-            ],
-          ),
+          Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: widget.assetaudioplayer!.builderRealtimePlayingInfos(
+                  builder: (context, infos) {
+                Duration currentposition = infos.currentPosition;
+                Duration totalduration = infos.duration;
+                return ProgressBar(
+                    timeLabelTextStyle:
+                        TextStyle(color: Colors.white, fontSize: 16),
+                    thumbColor: Colors.white,
+                    baseBarColor: Colors.grey,
+                    progressBarColor: Colors.red,
+                    bufferedBarColor: Colors.red,
+                    thumbRadius: 10,
+                    barHeight: 4,
+                    progress: currentposition,
+                    total: totalduration,
+                    onSeek: ((to) {
+                      //audioPlayer.seek(to);
+                      audioPlayer.seek(to);
+                    }));
+              })),
           SizedBox(
             height: 20,
           ),
@@ -103,7 +132,18 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                     size: 30,
                   )),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => widget.index! <
+                                    songarray.length - 1
+                                ? ScreenNowplay(
+                                    assetaudioplayer: widget.assetaudioplayer,
+                                    index: widget.index! - 1,
+                                    songs1: songarray[widget.index! + 1])
+                                : ScreenHome())));
+                  },
                   icon: Icon(
                     Icons.skip_previous_sharp,
                     color: Colors.white,
@@ -114,8 +154,11 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                     setState(() {
                       if (_isplaying) {
                         _isplaying = false;
+                        widget.assetaudioplayer!.pause();
                       } else {
                         _isplaying = true;
+
+                        widget.assetaudioplayer!.play();
                       }
                     });
                   },
@@ -131,7 +174,18 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                           size: 35,
                         ))),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => widget.index! <
+                                    songarray.length - 1
+                                ? ScreenNowplay(
+                                    assetaudioplayer: widget.assetaudioplayer,
+                                    index: widget.index! + 1,
+                                    songs1: songarray[widget.index! + 1])
+                                : ScreenHome())));
+                  },
                   icon: Icon(
                     Icons.skip_next_sharp,
                     color: Colors.white,

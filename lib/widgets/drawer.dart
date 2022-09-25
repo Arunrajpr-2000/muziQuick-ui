@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_ui/Screeens/Mostply.dart';
 import 'package:music_ui/Screeens/favourite.dart';
 import 'package:music_ui/Screeens/home.dart';
 import 'package:music_ui/Screeens/playlist.dart';
@@ -83,7 +84,7 @@ class _DrawerState extends State<ScreenDrawer> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.recent_actors, color: Colors.white),
+              leading: const Icon(Icons.library_music, color: Colors.white),
               title: const Text(
                 'Recents',
                 style: TextStyle(color: Colors.white),
@@ -91,6 +92,17 @@ class _DrawerState extends State<ScreenDrawer> {
               onTap: () {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (ctx1) => ScreenRecents()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.queue_music, color: Colors.white),
+              title: const Text(
+                'Most Played',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (ctx1) => ScreenMostply()));
               },
             ),
             ListTile(

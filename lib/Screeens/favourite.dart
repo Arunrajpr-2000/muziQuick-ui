@@ -32,8 +32,8 @@ class _ScreenFavouriteState extends State<ScreenFavourite> {
           itemBuilder: (context, index) {
             return ListTile(
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (ctx1) => ScreenNowplay()));
+                // Navigator.of(context).push(
+                //     MaterialPageRoute(builder: (ctx1) => ScreenNowplay()));
               },
               title: Text(
                 'Hope',
